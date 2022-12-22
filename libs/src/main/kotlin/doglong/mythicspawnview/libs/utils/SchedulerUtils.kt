@@ -9,6 +9,8 @@ import java.util.concurrent.CompletableFuture
  */
 fun runSync(task: Runnable) = Bukkit.getScheduler().runTask(Main.getPlugin(), task)
 
+fun runSyncLater(task: Runnable, delay: Long) =  Bukkit.getScheduler().runTaskLater(Main.getPlugin(), task, delay)
+
 fun runSyncTimer(task: Runnable, delay: Long, tick: Long) =  Bukkit.getScheduler().runTaskTimer(Main.getPlugin(), task, delay, tick)
 
 fun runAsync(task: Runnable) {

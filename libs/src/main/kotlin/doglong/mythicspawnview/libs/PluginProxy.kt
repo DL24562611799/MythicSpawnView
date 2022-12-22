@@ -29,8 +29,8 @@ abstract class PluginProxy {
         this.actives.forEach { iActive -> iActive.stopping(this.plugin) }
     }
 
-    fun addActive(active: IActive) {
-        this.actives.add(active)
+    fun IActive.addActive() {
+        actives.add(this)
     }
 
     fun log(message: String) {

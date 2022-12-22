@@ -11,9 +11,9 @@ import doglong.mythicspawnview.libs.utils.StringUtils.toFormat
 object MythicSpawnView : PluginProxy() {
 
     override fun initializing() {
-        addActive(RootConfig)
-        addActive(SpawnsConfig)
-        addActive(MythicSpawnerUpdateTask)
+        RootConfig.addActive()
+        SpawnsConfig.addActive()
+        MythicSpawnerUpdateTask.addActive()
     }
 
     override fun enabling() {

@@ -7,6 +7,7 @@ import java.io.File
 
 object SpawnsConfig: IActive {
 
+    var defSetting = SpawnSetting(0.0, 0.0, 0.0)
     var spawns = mutableMapOf<String, SpawnSetting>()
 
     override fun init(plugin: Plugin) {
@@ -18,9 +19,13 @@ object SpawnsConfig: IActive {
                 plugin.saveResource("spawns.yml", true)
             }
         }
-        this.spawns = mutableMapOf();
+        this.spawns = mutableMapOf()
         val yaml = YamlConfiguration.loadConfiguration(file)
+        this.defSetting = SpawnSetting(yaml.getDouble("default.offsetX"), yaml.getDouble("default.offsetY"), yaml.getDouble("default.offsetZ"))
         for (key in yaml.getKeys(false)) {
+            if (key.equals("default")) {
+                continue
+            }
             val section = yaml.getConfigurationSection(key)
             section?.getStringList("spawns")?.forEach {
                 this.spawns[it] = SpawnSetting(
