@@ -29,6 +29,7 @@ object StringUtils {
      * @param params 参数数组
      */
     fun String.toFormat(vararg params: Any?): String {
+
         if (params.isEmpty() || this.isEmpty()) {
             return this
         }
