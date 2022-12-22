@@ -1,0 +1,9 @@
+example:
+  # 应用于哪些生产点索引名
+  spawns: [测试生成点]
+  # 全息显示偏移X坐标位置
+  offsetX: 0
+  # 全息显示偏移Y坐标位置
+  offsetY: 1.5
+  # 全息显示偏移Z坐标位置
+  offsetZ: 0

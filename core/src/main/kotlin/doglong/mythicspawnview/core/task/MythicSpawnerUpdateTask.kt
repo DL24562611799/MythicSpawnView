@@ -5,7 +5,9 @@ import com.gmail.filoghost.holographicdisplays.api.HologramsAPI
 import com.gmail.filoghost.holographicdisplays.api.line.TextLine
 import doglong.mythicspawnview.MythicSpawnView
 import doglong.mythicspawnview.core.config.RootConfig
+import doglong.mythicspawnview.core.config.SpawnsConfig
 import doglong.mythicspawnview.libs.IActive
+import doglong.mythicspawnview.libs.utils.StringUtils.toColor
 import doglong.mythicspawnview.libs.utils.StringUtils.toFormat
 import doglong.mythicspawnview.libs.utils.runAsync
 import doglong.mythicspawnview.libs.utils.runSyncTimer
@@ -20,28 +22,36 @@ object MythicSpawnerUpdateTask: IActive {
     private var holograms = mutableMapOf<String, Hologram>()
 
     fun update() {
+
         if (!lock && !running) {
             running = true
-            for (spawner in MythicMobs.inst().spawnerManager.spawners) {
-                if (RootConfig.whitelist.contains(spawner.internalName)) {
+            SpawnsConfig.spawns.entries.forEach {
+                val spawner = MythicMobs.inst().spawnerManager.getSpawnerByName(it.key)
+                val setting = it.value
+                if (spawner != null) {
                     val hologram = holograms.computeIfAbsent(spawner.internalName) {
+                        val location = spawner.location
+                        location.add(setting.x, setting.y, setting.z)
                         HologramsAPI.createHologram(
                             MythicSpawnView.plugin,
-                            BukkitAdapter.adapt(spawner.location)
+                            BukkitAdapter.adapt(location)
                         )
                     }
                     RootConfig.descriptionList.forEachIndexed { i: Int, s: String ->
                         val text = s.toFormat(
                             spawner.internalName,
-                            spawner.remainingWarmupSeconds,
-                            if (spawner.isOnWarmup) RootConfig.placeholderOnWarmup else RootConfig.placeholderNoWarmup
-                        )
+                            spawner.typeName,
+                            if (spawner.isOnWarmup) spawner.remainingWarmupSeconds else RootConfig.placeholderNoWarmup
+                        ).toColor()
                         val textLine: TextLine
                         try {
                             textLine = hologram.getLine(i) as TextLine
                             textLine.text = text
                         }catch (_: Exception) {
-                            hologram.insertTextLine(i, text)
+                            try {
+                                hologram.insertTextLine(i, text)
+                            }catch (_: Exception) {
+                            }
                         }
                     }
                 }
@@ -58,6 +68,7 @@ object MythicSpawnerUpdateTask: IActive {
             while (running) {
             }
             holograms.entries.forEach { it.value.delete() }
+            holograms.clear()
             lock = false
             MythicSpawnView.log("&6插件缓存已清除，耗时: {0}".toFormat(System.currentTimeMillis() - time))
         }

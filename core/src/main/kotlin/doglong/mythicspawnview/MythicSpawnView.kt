@@ -1,6 +1,7 @@
 package doglong.mythicspawnview
 
 import doglong.mythicspawnview.core.config.RootConfig
+import doglong.mythicspawnview.core.config.SpawnsConfig
 import doglong.mythicspawnview.core.listener.MythicMobsListener
 import doglong.mythicspawnview.core.task.MythicSpawnerUpdateTask
 import doglong.mythicspawnview.libs.PluginProxy
@@ -11,6 +12,7 @@ object MythicSpawnView : PluginProxy() {
 
     override fun initializing() {
         addActive(RootConfig)
+        addActive(SpawnsConfig)
         addActive(MythicSpawnerUpdateTask)
     }
 
