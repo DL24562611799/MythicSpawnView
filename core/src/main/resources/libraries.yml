@@ -1,0 +1,9 @@
+# If not defined, it will be 'libraries'
+# when start with @Plugin: will start with plugin data folder
+libraries-folder: 'libs'
+repositories:
+  - https://maven.aliyun.com/repository/public/
+  - https://repo.maven.apache.org/maven2/
+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.22
